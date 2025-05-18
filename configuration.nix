@@ -44,6 +44,8 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
+  home-manager.backupFileExtension = "backup";
+
   # Enable the X11 windowing system with minimal configuration
   # This is kept for compatibility with some applications
   services.xserver = {
