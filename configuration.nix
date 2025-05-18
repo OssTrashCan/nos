@@ -44,13 +44,22 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  # Enable the X11 windowing system with minimal configuration
+  # This is kept for compatibility with some applications
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = true;
+    # Disable default desktop environments
+    desktopManager.plasma6.enable = false;
+    excludePackages = [ pkgs.xterm ];
+  };
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # Enable Hyprland (Wayland compositor)
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -70,11 +79,18 @@
     alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
 
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+  };
+  
+  # Enable better Wayland support
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -87,9 +103,17 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       git
-      kdePackages.kate
       vscode
       google-chrome
+      # Wayland-specific utilities
+      waybar           # Status bar
+      wofi             # Application launcher
+      wl-clipboard     # Clipboard manager
+      grim             # Screenshot utility
+      slurp            # Screen area selection
+      swappy           # Screenshot editor
+      mako             # Notification daemon
+      kitty            # Terminal emulator with good Wayland support
       
     #  thunderbird
     ];
@@ -104,9 +128,56 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    # Basic utilities
+    vim
+    wget
+    
+    # Wayland and Hyprland utilities
+    wev              # Event viewer for debugging
+    xdg-desktop-portal-hyprland
+    xdg-desktop-portal-gtk
+    libsForQt5.polkit-kde-agent # Authentication agent
+    
+    # File manager with Wayland support
+    gnome.nautilus
+    
+    # Media and system utilities
+    pavucontrol      # Audio control
+    brightnessctl    # Brightness control
+    networkmanagerapplet
+    
+    # Fonts
+    jetbrains-mono
+    font-awesome
+    noto-fonts
+    noto-fonts-emoji
   ];
+  
+  # Enable XDG Portal for better Wayland application integration
+  xdg.portal = {
+    enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-hyprland
+    ];
+    config.common.default = "*";
+  };
+  
+  # Configure fonts
+  fonts.packages = with pkgs; [
+    jetbrains-mono
+    font-awesome
+    noto-fonts
+    noto-fonts-emoji
+    noto-fonts-cjk
+    liberation_ttf
+  ];
+  
+  # Enable polkit for authentication dialogs
+  security.polkit.enable = true;
+  
+  # Enable dconf (needed for GTK applications)
+  programs.dconf.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

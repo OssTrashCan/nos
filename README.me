@@ -1,0 +1,77 @@
+# NixOS Hyprland Configuration
+
+This repository contains a NixOS configuration for using the Hyprland Wayland compositor.
+
+## Overview
+
+This configuration:
+- Uses Wayland with Hyprland as the window manager
+- Configures GDM as the display manager
+- Sets up a complete desktop environment with:
+  - Waybar for the status bar
+  - Wofi as the application launcher
+  - Kitty as the terminal emulator
+  - Various Wayland utilities (screenshots, clipboard, etc.)
+- Uses home-manager to manage user configurations
+
+## Components
+
+- **flake.nix**: The main entry point for the NixOS configuration
+- **configuration.nix**: System-wide configuration
+- **hardware-configuration.nix**: Hardware-specific configuration
+- **home.nix**: User-specific configuration managed by home-manager
+
+## Installation
+
+1. Clone this repository or copy these files to your NixOS configuration directory
+2. Rebuild your NixOS configuration:
+
+```bash
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+## Usage
+
+### Keyboard Shortcuts
+
+Hyprland uses the Super key (Windows key) as the modifier key. Here are some basic shortcuts:
+
+- **Super + Return**: Open terminal (Kitty)
+- **Super + Q**: Close active window
+- **Super + M**: Exit Hyprland
+- **Super + E**: Open file manager (Nautilus)
+- **Super + V**: Toggle floating mode
+- **Super + R**: Open application launcher (Wofi)
+- **Super + 1-0**: Switch to workspace 1-10
+- **Super + Shift + 1-0**: Move active window to workspace 1-0
+- **Super + Arrow keys**: Move focus
+- **Print Screen**: Take a screenshot of a selected area
+- **Shift + Print Screen**: Take a screenshot of the entire screen
+
+### Customization
+
+You can customize the Hyprland configuration by editing the `home.nix` file. After making changes, rebuild your configuration:
+
+```bash
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+## Troubleshooting
+
+### Display Issues
+
+If you encounter display issues:
+- Check that your GPU drivers are properly configured
+- Verify that the monitor configuration in `home.nix` matches your setup
+
+### Application Compatibility
+
+Some applications may not work well with Wayland. For these applications:
+- XWayland is enabled by default to support X11 applications
+- You can add specific window rules in the Hyprland configuration
+
+## Additional Resources
+
+- [Hyprland Documentation](https://wiki.hyprland.org/)
+- [Home Manager Documentation](https://nix-community.github.io/home-manager/)
+- [NixOS Wiki](https://nixos.wiki/wiki/Main_Page)
