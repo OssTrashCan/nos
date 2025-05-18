@@ -89,8 +89,8 @@
   # Enable better Wayland support
   hardware.opengl = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    #driSupport = true;
+    #driSupport32Bit = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -114,7 +114,10 @@
       swappy           # Screenshot editor
       mako             # Notification daemon
       kitty            # Terminal emulator with good Wayland support
-      
+      neovim
+fish
+nushell
+zsh
     #  thunderbird
     ];
   };
@@ -139,7 +142,7 @@
     libsForQt5.polkit-kde-agent # Authentication agent
     
     # File manager with Wayland support
-    gnome.nautilus
+    nautilus
     
     # Media and system utilities
     pavucontrol      # Audio control
@@ -169,7 +172,7 @@
     font-awesome
     noto-fonts
     noto-fonts-emoji
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     liberation_ttf
   ];
   
